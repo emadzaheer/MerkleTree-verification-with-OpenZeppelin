@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/merkletreejs@latest/merkletree.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/keccak256@latest/keccak256.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+        const addresses = ["0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2", "0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db", "0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB", "0x617F2E2fD72FD9D5503197092aC168c91465E7f2"]
+        const leaves = addresses.map(x => keccak256(x))
+        const tree = new MerkleTree(leaves, keccak256, {sortPairs: true})
+        const buf2hex = x => '0x' + x.toString('hex')
+        console.log(buf2hex(tree.getRoot()))  //submit this root to contract
+        console.log("-------------------------------------------------");
+        console.log(leaves[2], "  |  ", leaves[3]);
+        console.log("-------------------------------------------------");
+        console.log(" proof of address at pos 0: ", tree.getProof(keccak256(addresses[0])).map( x=> buf2hex(x.data) ) );
+        console.log(" proof of address at pos 1: ", tree.getProof(keccak256(addresses[1])).map( x=> buf2hex(x.data) ) );
+        console.log(" proof of address at pos 2: ", tree.getProof(keccak256(addresses[2])).map( x=> buf2hex(x.data) ) );
+        console.log(" proof of address at pos 3: ", tree.getProof(keccak256(addresses[3])).map( x=> buf2hex(x.data) ) );
+    </script>
+</body>
+</html>
